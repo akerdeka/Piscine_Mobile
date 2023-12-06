@@ -20,7 +20,7 @@ class TopBar extends StatefulWidget {
 }
 
 class _TopBarState extends State<TopBar> {
-  List<CityModel> filteredItems = [];
+
 
   Future<List<Placemark>> getCityNameFromPosition(Position localisation) async {
     try {
@@ -35,68 +35,49 @@ class _TopBarState extends State<TopBar> {
     }
   }
 
-  Future<http.Response> fetchListOfCities(String search) async {
+  Future<List<CityModel>> fetchListOfCities(String search) async {
+
     http.Response res = await http.get(Uri.parse(
         'https://geocoding-api.open-meteo.com/v1/search?name=$search&count=20&language=en&format=json'));
 
-    //debugPrint(jsonDecode(res.body));
-    filteredItems.add(const CityModel(name: "Lyon"));
+    List<CityModel> filteredItems = [];
 
-    return res;
+    if (!jsonDecode(res.body).containsKey("results")){
+      return filteredItems;
+    }
+
+    for (dynamic location in jsonDecode(res.body)["results"]) {
+      debugPrint(location.toString());
+      filteredItems.add(CityModel(name: location.name, region: location.admin1, country: location.country));
+    }
+
+    return filteredItems;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.grey,
-        actions: <Widget>[
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: SizedBox(
-                height: 40,
-                child: SearchBar(
-                  leading: const Icon(Icons.search),
-                  onChanged: (String value) async {
-                    await fetchListOfCities(value);
-                    widget.onSearchChanged(value);
-                  },
-                ),
-              ),
-            ),
-          ),
-          IconButton(
-              onPressed: () => {
-                    determinePosition()
-                        .then((value) => {
-                              getCityNameFromPosition(value).then((res) => {
-                                    debugPrint(res.toString()),
-                                  }),
-                              widget.onSearchChanged(
-                                  "${value.latitude} ${value.longitude}")
-                            })
-                        .onError((error, stackTrace) =>
-                            {widget.onSearchChanged("$error")}),
-                  },
-              icon: const Icon(Icons.map))
-        ],
-      ),
-      body: filteredItems.isEmpty
-          ? const Center(
-              child: Text(
-                'No Results Found',
-                style: TextStyle(fontSize: 18),
-              ),
+    return TypeAheadField(
+      suggestionsCallback: (search) => fetchListOfCities(search),
+      builder: (context, controller, focusNode) {
+        return TextField(
+            controller: controller,
+            focusNode: focusNode,
+            autofocus: true,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'City'
             )
-          : ListView.builder(
-              itemCount: filteredItems.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(filteredItems[index].name),
-                );
-              },
-            ),
+        );
+      },
+      itemBuilder: (context, city) {
+        return ListTile(
+          title: Text(city.name),
+          subtitle: Text(city.country),
+        );
+      },
+      onSelected: (city) {
+        debugPrint(city.toString());
+      },
     );
   }
 }
