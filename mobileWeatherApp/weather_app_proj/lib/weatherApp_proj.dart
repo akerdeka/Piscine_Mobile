@@ -49,7 +49,7 @@ class _WeatherAppHomeState extends State<WeatherAppHome> {
         ),
         body: Center(
           child: TabBarView(
-            children: [CurrentlyView(localisation: _searchField,), const TodayView(), const WeeklyView()],
+            children: [CurrentlyView(localisation: _searchField), TodayView(localisation: _searchField), WeeklyView(localisation: _searchField)],
           ),
         ),
         bottomNavigationBar: const BottomBar(),

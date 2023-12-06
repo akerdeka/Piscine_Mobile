@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 
 class WeeklyView extends StatefulWidget {
-  const WeeklyView({super.key});
+  const WeeklyView({required this.localisation, super.key});
+
+  final String localisation;
 
   @override
   State<WeeklyView> createState() => _WeeklyViewState();
@@ -10,6 +12,6 @@ class WeeklyView extends StatefulWidget {
 class _WeeklyViewState extends State<WeeklyView> {
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("Weekly"));
+    return Center(child: Text('Weekly\n${widget.localisation}'));
   }
 }

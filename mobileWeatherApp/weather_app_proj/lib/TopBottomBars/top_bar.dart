@@ -31,7 +31,9 @@ class _TopBarState extends State<TopBar> {
             ),
           ),
         ),
-        IconButton(onPressed: () => {}, icon: const Icon(Icons.map))
+        IconButton(onPressed: () => {
+          widget.onSearchChanged("Geolocation")
+        }, icon: const Icon(Icons.map))
       ],
     );
   }
