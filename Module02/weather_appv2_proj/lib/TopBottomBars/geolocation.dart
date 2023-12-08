@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+
+import '../weatherAppV2_proj.dart';
 
 Future<Position> determinePosition() async {
   bool serviceEnabled;
@@ -23,14 +28,16 @@ Future<Position> determinePosition() async {
       // Android's shouldShowRequestPermissionRationale
       // returned true. According to Android guidelines
       // your App should show an explanatory UI now.
-      return Future.error('Location permissions are denied');
+      return Future.error(
+          'Geolocation is not available, please enable it in your App settings');
     }
   }
 
   if (permission == LocationPermission.deniedForever) {
     var error = false;
 
-    return Future.error("Location permissions are permanently denied");
+    return Future.error(
+        "Geolocation is not available, please enable it in your App settings");
   }
 
   try {
@@ -41,5 +48,19 @@ Future<Position> determinePosition() async {
   } catch (error) {
     debugPrint(error.toString());
     return Future.error("Could not get position");
+  }
+}
+
+Future<Placemark> getCityNameFromPosition(Position localisation) async {
+  try {
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      localisation.latitude,
+      localisation.longitude,
+    );
+
+    debugPrint(jsonEncode(placemarks.first));
+    return placemarks.first;
+  } catch (err) {
+    return Future.error(err);
   }
 }
