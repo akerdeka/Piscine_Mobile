@@ -26,7 +26,7 @@ class _TopBarState extends State<TopBar> {
       http.Response res = await http.get(Uri.parse(
           'https://geocoding-api.open-meteo.com/v1/search?name=$search&count=10&language=en&format=json')).timeout(
         const Duration(seconds: 5),
-        onTimeout: () {throw Exception("No connexion");}
+        onTimeout: () {throw Exception("The service connexion is lost, please check your internet connection or try again later");}
       );
 
       if (!jsonDecode(res.body).containsKey("results")) {
@@ -48,7 +48,7 @@ class _TopBarState extends State<TopBar> {
       }
     } on Exception catch (e) {
       debugPrint(e.toString());
-      return Future.error("No connexion");
+      return Future.error("The service connexion is lost, please check your internet connection or try again later");
     }
 
     return filteredItems;
