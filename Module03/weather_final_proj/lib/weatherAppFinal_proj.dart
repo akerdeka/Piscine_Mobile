@@ -55,6 +55,7 @@ class _WeatherAppState extends State<WeatherApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      darkTheme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.amber, brightness: Brightness.dark)),
       home: FutureBuilder(
           future: _hasPos == false ? getPosition() : null,
           builder: (BuildContext context,
@@ -62,7 +63,7 @@ class _WeatherAppState extends State<WeatherApp> {
             return Container(
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("lib/Images/Weather_clear.jpeg"),
+                      image: AssetImage("lib/Images/app_background.jpeg"),
                       fit: BoxFit.cover
                   )
               ),
@@ -128,7 +129,7 @@ class _WeatherAppHomeState extends State<WeatherAppHome> {
                         backgroundColor: Colors.transparent,
                         body: Center(
                           child: LoadingAnimationWidget.fallingDot(
-                              color: Colors.blue, size: 100),
+                              color: Colors.amber, size: 100),
                         ),
                       );
                     } else if (snapshot.connectionState ==
@@ -158,7 +159,7 @@ class _WeatherAppHomeState extends State<WeatherAppHome> {
                   },
                 ));
           } else {
-            return errorText.isEmpty ? const Center(child: Text("No position")) :
+            return errorText.isEmpty ? const Center(child: Text("Geolocation is not available, please enable it in your App settings", style: TextStyle(color: Colors.red),)) :
             Center(child: Text(errorText));
           }
         }),

@@ -145,8 +145,8 @@ class _WeatherAppHomeState extends State<WeatherAppHome> {
                   },
                 ));
           } else {
-            return errorText.isEmpty ? const Center(child: Text("No position")) :
-            Center(child: Text(errorText));
+            return errorText.isEmpty ? const Center(child: Text("Geolocation is not available, please enable it in your App settings", style: TextStyle(color: Colors.red),)) :
+            Center(child: Text(errorText, style: const TextStyle(color: Colors.red)));
           }
         }),
         bottomNavigationBar: const BottomBar(),

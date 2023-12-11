@@ -49,6 +49,26 @@ class WeatherModel {
 
   WeatherModel(this.current, this.daily, this.weekly);
 
+  static double getMaxTemp(List<HourlyModel> list) {
+    double biggest = double.negativeInfinity;
+    for (var data in list) {
+      if (double.parse(data.temperature) > biggest) {
+        biggest = double.parse(data.temperature);
+      }
+    }
+    return biggest;
+  }
+
+  static double getMinTemp(List<HourlyModel> list) {
+    double lowest = double.maxFinite;
+    for (var data in list) {
+      if (double.parse(data.temperature) < lowest) {
+        lowest = double.parse(data.temperature);
+      }
+    }
+    return lowest;
+  }
+
   factory WeatherModel.fromJson(Map<String, dynamic>json) {
 
     List<HourlyModel> daily = List<HourlyModel>.empty(growable: true);

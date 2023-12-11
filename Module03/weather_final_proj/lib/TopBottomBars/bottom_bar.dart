@@ -13,7 +13,7 @@ class _BottomBarState extends State<BottomBar> {
     return Container(
       color: Colors.transparent,
       child: const TabBar(
-        unselectedLabelColor: Colors.black,
+        unselectedLabelColor: Colors.white,
           indicatorColor: Colors.amber,
           labelColor: Colors.amber,
 

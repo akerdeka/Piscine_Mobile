@@ -66,8 +66,9 @@ class _TopBarState extends State<TopBar> {
           actions: <Widget>[
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(7),
+            padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
             child: TypeAheadField(
+
               hideOnEmpty: false,
               suggestionsCallback: (search) async {
                 List<CityModel> list = [];
@@ -93,12 +94,17 @@ class _TopBarState extends State<TopBar> {
                       }
                     },
                     decoration: const InputDecoration(
-                        border: OutlineInputBorder(), labelText: 'Search location'));
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2, color: Colors.amber)
+                        ),
+                        hintText: 'Search location'
+                    )
+                );
               },
               itemBuilder: (context, city) {
                 return ListTile(
                   leading: const Icon(Icons.location_city),
-                  titleTextStyle: const TextStyle(fontSize: 20, color: Colors.black),
+                  titleTextStyle: const TextStyle(fontSize: 20, color: Colors.amber),
                   title: Text(city.name),
                   subtitle: Text("${city.country}, ${city.region}"),
                 );
@@ -133,7 +139,7 @@ class _TopBarState extends State<TopBar> {
               isUsingGps = true;
               widget.onCityChanged(newCity);
             },
-            icon: Icon(isUsingGps ? Icons.gps_fixed : Icons.gps_not_fixed))
+            icon: Container(child: isUsingGps ? Icon(Icons.gps_fixed, color: Colors.amber.shade600,) : const Icon(Icons.gps_not_fixed)))
       ]),
     );
   }
