@@ -1,9 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:module_04/utils/data_model.dart';
 import '../utils/database.dart';
-
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import '../utils/feelings.dart';
+import './add_popup.dart';
+import './view_card.dart';
+import 'package:intl/intl.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -14,8 +16,9 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
 
-  final Stream<QuerySnapshot> _diaryStream =
-  FirebaseFirestore.instance.collection('diary').snapshots();
+  void _onRefresh() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,83 +34,82 @@ class _ProfileState extends State<Profile> {
                   fit: BoxFit.contain,
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(width: 2, color: Colors.blueGrey),
-                      borderRadius: const BorderRadius.all(Radius.circular(5))
+                        border: Border.all(width: 2, color: Colors.blueGrey),
+                        borderRadius: const BorderRadius.all(Radius.circular(5))
                     ),
                     height: MediaQuery.of(context).size.height / 2,
                     width: MediaQuery.of(context).size.width,
                     child: SingleChildScrollView(
-                      child: StreamBuilder<QuerySnapshot>(
-                        stream: _diaryStream,
-                        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                          if (snapshot.hasError) {
-                            return const Text('Something went wrong');
-                          }
-
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const Text("Loading");
-                          }
-
-                          return Column(
-                            children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                              Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-                              DateTime date = DateTime.fromMillisecondsSinceEpoch(data["date"].seconds * 1000);
-                              return Row(
-                                children: [
-                                  Column(
-                                    children: [
-                                      Text(date.day.toString()),
-                                      Text(date.month.toString()),
-                                      Text(date.year.toString()),
-                                    ],
-                                  ),
-                                  Text(data["feeling"]),
-                                  Text(data["title"])
-                                ],
-                              );
-                            }).toList()
-                          );
-                        },
-                      )
-                      /*child: FutureBuilder(
+                      child: FutureBuilder(
                         future: Database.getDatas(),
                         builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Center(
+                              child: LoadingAnimationWidget.fallingDot(
+                                      color: Colors.pink.shade100, size: 100),
+                            );
+                          }
                           if (snapshot.connectionState == ConnectionState.done) {
                             return Column(
-                              children: snapshot.data!.map((e) => Row(
-
-                                children: [
-                                  Column(
-                                    children: [
-                                      Text(e.date.day.toString()),
-                                      Text(e.date.month.toString()),
-                                      Text(e.date.year.toString()),
-                                    ],
+                              children: snapshot.data!.map((e) => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: InkWell(
+                                  onTap: () => {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => viewPopupDialog(context, e, _onRefresh),
+                                    )
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.pink.shade100,
+                                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                      boxShadow: CupertinoContextMenu.kEndBoxShadow,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Text("${DateFormat.E().format(e.date)} ${DateFormat.d().format(e.date)}", style: const TextStyle(color: Colors.black, fontSize: 20)),
+                                              Text(DateFormat.LLLL().format(e.date), style: const TextStyle(color: Colors.black, fontSize: 20)),
+                                              Text(e.date.year.toString(), style: const TextStyle(color: Colors.black, fontSize: 20)),
+                                            ],
+                                          ),
+                                          Text(e.title, style: const TextStyle(color: Colors.black, fontSize: 20)),
+                                          Feelings.getIcon(e.feeling)
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                  Text(e.feeling),
-                                  Text(e.title)
-                                ],
+                                ),
                               )).toList(),
                             );
                           }
-                          return Text("Loading");
+                          return const Text("Loading");
                         },
-                      )*/
+                      )
                     ),
                   ),
                 ),
                 FittedBox(
                   alignment: Alignment.bottomCenter,
                   child: ElevatedButton(
-                      onPressed: () {
-                        Database.addData(DataModel(DateTime.now(), 'me', "TEST", "TEST", "Sad"));
-                      },
-                      child: const Row(
-                        children: [
-                          Icon(Icons.add),
-                          Text("Add new diary")
-                        ],
-                      ),
+                    onPressed: () async {
+                      await showDialog(
+                          context: context,
+                          builder: (context) => addPopupDialog(context),
+                      );
+                      _onRefresh();
+                    },
+                    child: const Row(
+                      children: [
+                        Icon(Icons.add, size: 30),
+                        Text("Add new diary", style: TextStyle(fontSize: 20),)
+                      ],
+                    ),
                   ),
                 )
               ],

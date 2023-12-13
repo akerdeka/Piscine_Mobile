@@ -40,6 +40,9 @@ dependencies:
   firebase_auth: ^4.15.2
   flutter_signin_button: ^2.0.0
   cloud_firestore: ^4.13.6
+  loading_animation_widget: ^1.2.0+4
+  intl: ^0.19.0
+  selectable_list: ^0.1.1
 
 dev_dependencies:
   flutter_test:

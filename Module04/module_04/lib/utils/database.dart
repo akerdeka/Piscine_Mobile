@@ -4,7 +4,6 @@ import 'package:module_04/utils/data_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Database {
-
   static Future<List<DataModel>> getDatas() async {
     FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -12,14 +11,14 @@ class Database {
 
     await db.collection("diary").get().then((event) {
       for (var doc in event.docs) {
-        /*Map<String, dynamic> filtered_datas = doc.data().values.where((element) => element["usermail"] == FirebaseAuth
-        .instance.currentUser.email)*/
-        datas.add(DataModel(DateTime.fromMillisecondsSinceEpoch(
-            doc.data()["date"].seconds * 1000),
+
+        datas.add(DataModel(
+            DateTime.fromMillisecondsSinceEpoch(doc.data()["date"].seconds * 1000),
             doc.data()["usermail"],
             doc.data()["title"],
             doc.data()["content"],
-            doc.data()["feeling"],));
+            doc.data()["feeling"],
+            doc.id));
         debugPrint("${doc.id} => ${doc.data()}");
       }
     });
@@ -41,5 +40,14 @@ class Database {
 // Add a new document with a generated ID
     db.collection("diary").add(newData).then((DocumentReference doc) =>
         debugPrint('DocumentSnapshot added with ID: ${doc.id}'));
+  }
+
+  static Future<void> deleteData(String doc) async {
+    FirebaseFirestore db = FirebaseFirestore.instance;
+
+    db.collection("diary").doc(doc).delete().then(
+          (doc) => debugPrint("Document deleted"),
+          onError: (e) => debugPrint("Error updating document $e"),
+        );
   }
 }

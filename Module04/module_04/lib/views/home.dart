@@ -24,6 +24,7 @@ class Home extends StatelessWidget {
           appBar: AppBar(
             title: const Text("My diary"),
             centerTitle: true,
+            automaticallyImplyLeading: false,
             backgroundColor: Colors.transparent,
             actions: [
               IconButton(
