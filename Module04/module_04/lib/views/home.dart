@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:module_04/views/Diary.dart';
+import 'package:module_04/views/Profile.dart';
+import 'package:module_04/views/bottom_bar.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -14,21 +17,33 @@ class Home extends StatelessWidget {
               fit: BoxFit.cover
           )
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: const Text("My diary"),
-          centerTitle: true,
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
           backgroundColor: Colors.transparent,
-          actions: [
-            IconButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-                Future.microtask(() => Navigator.pushNamed(context, "/"));
-              },
-              icon: const Icon(Icons.logout)
+          appBar: AppBar(
+            title: const Text("My diary"),
+            centerTitle: true,
+            backgroundColor: Colors.transparent,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                  Future.microtask(() => Navigator.pushNamed(context, "/"));
+                },
+                icon: const Icon(Icons.logout)
+              ),
+            ]
+          ),
+          body: const Center(
+            child: TabBarView(
+              children: [
+                Profile(),
+                Diary(),
+              ],
             ),
-          ]
+          ),
+          bottomNavigationBar: const BottomBar(),
         ),
       ),
     );
