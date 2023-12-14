@@ -49,7 +49,7 @@ class _ProfileState extends State<Profile> {
                                       color: Colors.pink.shade100, size: 100),
                             );
                           }
-                          if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
                             return Column(
                               children: snapshot.data!.map((e) => Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -78,7 +78,10 @@ class _ProfileState extends State<Profile> {
                                               Text(e.date.year.toString(), style: const TextStyle(color: Colors.black, fontSize: 20)),
                                             ],
                                           ),
-                                          Text(e.title, style: const TextStyle(color: Colors.black, fontSize: 20)),
+                                          Expanded(child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Center(child: Text(e.title, style: const TextStyle(color: Colors.black, fontSize: 20))),
+                                          )),
                                           Feelings.getIcon(e.feeling)
                                         ],
                                       ),
@@ -100,7 +103,7 @@ class _ProfileState extends State<Profile> {
                     onPressed: () async {
                       await showDialog(
                           context: context,
-                          builder: (context) => addPopupDialog(context),
+                          builder: (context) => AddPopUp(),
                       );
                       _onRefresh();
                     },

@@ -35,15 +35,6 @@ Widget viewPopupDialog(BuildContext context, DataModel data, refresh) {
         },
         icon: const Icon(Icons.delete),
       ),
-      IconButton(
-        style: ButtonStyle(
-            backgroundColor: MaterialStateColor.resolveWith((states) => Colors.pink.shade100)
-        ),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        icon: const Icon(Icons.close),
-      ),
     ],
   );
 }

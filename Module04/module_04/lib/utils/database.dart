@@ -22,7 +22,7 @@ class Database {
         debugPrint("${doc.id} => ${doc.data()}");
       }
     });
-    return datas;
+    return datas.where((element) => element.userEmail == FirebaseAuth.instance.currentUser!.email).toList();
   }
 
   static Future<void> addData(DataModel data) async {
