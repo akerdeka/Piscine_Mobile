@@ -1,5 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run" type="FlutterRunConfigurationType" factoryName="Flutter">
+    <option name="additionalArgs" value="./lib/weatherAppFinal_proj.dart" />
     <option name="filePath" value="$PROJECT_DIR$/weather_final_proj/lib/weatherAppFinal_proj.dart" />
     <method v="2" />
   </configuration>

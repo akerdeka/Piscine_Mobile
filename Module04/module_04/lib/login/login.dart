@@ -41,6 +41,12 @@ class _LoginState extends State<Login> {
                     Navigator.pushNamed(context, "/home");
                   }
                 } catch (e) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const AlertDialog(content: Text("An error has occurred: please check your connexion or retry later."));
+                      }
+                      );
                   debugPrint("here");
                 }
               },
