@@ -114,7 +114,7 @@ class _WeeklyViewState extends State<WeeklyView> {
                           mainAxisAlignment:
                           MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(item.date),
+                            Text(item.date, style: TextStyle(color: Colors.white)),
                             Icon(WmoWeatherCodes.getIconFromCode(item.weatherDescription), color: Colors.amber),
                             Text('${item.maxTemp} °C', style: TextStyle(color: Colors.amber[900])),
                             Text('${item.minTemp} °C', style: TextStyle(color: Colors.amber[100]),)

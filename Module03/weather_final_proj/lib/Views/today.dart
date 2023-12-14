@@ -115,7 +115,7 @@ class _TodayViewState extends State<TodayView> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(item.time
-                                        .substring(11, item.time.length)),
+                                        .substring(11, item.time.length), style: TextStyle(color: Colors.white),),
                                     Text(
                                       '${item.temperature} °C',
                                       style: const TextStyle(color: Colors.amber),
@@ -125,7 +125,7 @@ class _TodayViewState extends State<TodayView> {
                                           item.weatherDescription),
                                       color: Colors.amber,
                                     ),
-                                    Text('${item.windSpeed} km/h'),
+                                    Text('${item.windSpeed} km/h', style: TextStyle(color: Colors.white)),
                                   ],
                                 ),
                               ),
